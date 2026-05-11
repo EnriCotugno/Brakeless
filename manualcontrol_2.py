@@ -215,7 +215,7 @@ def main():
             #print(f"laps={S.get('laps',0)} dist={S.get('distRaced',0):.1f} pos={track_pos:.2f}", end='\r')
             
             # Se colpisci qualcosa o esci dai bordi (1.0 = bordo), invalida il buffer attuale
-            if current_damage > last_damage or abs(track_pos) > 1.4:
+            if current_damage > last_damage or abs(track_pos) > 1.3:
                 if is_lap_valid:
                     print("⚠️ Giro invalidato (Danno o Fuori Pista). Dati scartati.")
                     is_lap_valid = False
