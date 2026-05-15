@@ -11,9 +11,9 @@ from sklearn.metrics import mean_squared_error
 import snakeoil as snakeoil3
 
 # Configurazioni
-DATASET_FILE = "dataset.csv"
-LAPS_FOLDER  = "Laps"          # Cartella contenente i file lap_*.csv
-K_NEIGHBORS  = 15 #7            # Numero di "ricordi" vicini da consultare
+DATASET_FILE = "dataset_more_parameters.csv"
+LAPS_FOLDER  = "Laps_more_parameters"          # Cartella contenente i file lap_*.csv
+K_NEIGHBORS  = 5            # Numero di "ricordi" vicini da consultare
 MAX_STEPS    = 200_000
 
 

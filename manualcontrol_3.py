@@ -184,7 +184,7 @@ def main():
             track_pos = S.get('trackPos', 0)
 
             # Logica invariata: scarta il giro se ci sono danni o se trackPos supera 1.3
-            if current_damage > last_damage or abs(track_pos) > 1.7:
+            if current_damage > last_damage or abs(track_pos) > 1.9:
                 if is_lap_valid:
                     print("⚠️ Giro invalidato (Danno o Fuori Pista). Dati scartati.")
                     is_lap_valid = False
