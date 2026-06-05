@@ -12,7 +12,7 @@ import snakeoil as snakeoil3
 # Configurazioni
 DATASET_FILE = "dataset.csv"
 LAPS_FOLDER  = "Laps"          # Cartella contenente i file lap_*.csv
-K_NEIGHBORS  = 5            # Numero di "ricordi" vicini da consultare
+K_NEIGHBORS  = 5
 MAX_STEPS    = 200_000
 
 
@@ -50,7 +50,7 @@ class PilotaKNN:
 
     def _addestra_modello(self, dataset_path):
         print("\n[1] Caricamento del dataset...")
-        # Il parametro comment='#' ignora in automatico i divisori dei giri!
+        
         try:
             df = pd.read_csv(dataset_path, comment='#')
         except FileNotFoundError:
@@ -64,7 +64,6 @@ class PilotaKNN:
         y = df[self.targets_names].values
 
         # Split del dataset (80% train, 20% test)
-        # Nota: Non usiamo 'stratify' perché stiamo facendo regressione, non classificazione
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=42
         )
