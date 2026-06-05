@@ -1,9 +1,8 @@
-# Intelligenza Artificiale (Behavioral Cloning) tramite K-NN Regressor
+
 import time
 import glob
 import os
 import pandas as pd
-import numpy as np
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -11,8 +10,8 @@ from sklearn.metrics import mean_squared_error
 import snakeoil as snakeoil3
 
 # Configurazioni
-DATASET_FILE = "dataset_more_parameters.csv"
-LAPS_FOLDER  = "Laps_more_parameters"          # Cartella contenente i file lap_*.csv
+DATASET_FILE = "dataset.csv"
+LAPS_FOLDER  = "Laps"          # Cartella contenente i file lap_*.csv
 K_NEIGHBORS  = 5            # Numero di "ricordi" vicini da consultare
 MAX_STEPS    = 200_000
 
@@ -21,7 +20,6 @@ def merge_laps(laps_folder: str, output_path: str) -> None:
     """
     Unisce tutti i file lap_*.csv presenti in `laps_folder` in un unico
     dataset CSV, eliminando le intestazioni ridondanti dei singoli giri.
-    Il file di output viene (ri)creato ogni volta che viene chiamata questa funzione.
     """
     pattern = os.path.join(laps_folder, "lap_*.csv")
     files = sorted(glob.glob(pattern))
@@ -82,8 +80,8 @@ class PilotaKNN:
         # Valutiamo l'errore per ogni asse per capire dove l'AI è meno precisa
         mse_steer = mean_squared_error(y_test[:, 0], y_pred[:, 0])
         mse_accel = mean_squared_error(y_test[:, 1], y_pred[:, 1])
-        print(f" - Errore Sterzo: {mse_steer:.4f} (Più vicino a 0 è meglio)")
-        print(f" - Errore Accel : {mse_accel:.4f} (Più vicino a 0 è meglio)")
+        print(f" - Errore Sterzo: {mse_steer:.4f} ")
+        print(f" - Errore Accel : {mse_accel:.4f} ")
         print("\n>>> MODELLO PRONTO! IN ATTESA DI TORCS... <<<\n")
 
     def predici_azioni(self, sensors: dict) -> dict:
@@ -125,7 +123,7 @@ def main():
     try:
         while True:
             client.get_servers_input()
-            t0 = time.time()
+            
             print("=== Gara Iniziata (Guida Autonoma KNN) ===")
             
             for step in range(MAX_STEPS):

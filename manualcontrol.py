@@ -1,8 +1,7 @@
-import math
+
 import os
 import sys
 import pygame
-from pynput.keyboard import Key, Listener
 import snakeoil as snakeoil3
 import time
 from datetime import datetime
@@ -127,7 +126,6 @@ def save_lap(output_dir, lap_buffer_csv, lap_time):
     time_label = f"{lap_time:.2f}" if lap_time > 0 else "partial"
     
     # Il nome file ora include sia il tempo sul giro che l'orario di salvataggio
-    # Esempio: lap_87.43_143022.csv
     filename = f"lap_{time_label}_{ts}.csv"
     csv_path = os.path.join(output_dir, filename)
  
@@ -142,7 +140,7 @@ def save_lap(output_dir, lap_buffer_csv, lap_time):
 # MAIN
 # ============================================================
 def main():
-    OUTPUT_DIR = "laps_more_parameters"
+    OUTPUT_DIR = "laps"
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     client = snakeoil3.Client(p=3001, vision=False)
@@ -152,12 +150,6 @@ def main():
     client.get_servers_input()
     print("Arcade driving mode attivo")
     
-    # Inizializzazione file CSV globale con le nuove feature
-    track_headers = ",".join([f"track_{i}" for i in range(19)])
-    csv_header = f"time,steer,accel,brake,gear,speedX,speedY,speedZ,trackPos,angle,rpm,damage,wheelSpin_0,wheelSpin_1,wheelSpin_2,wheelSpin_3,{track_headers}\n"
-    
-    with open("manual_log.csv", "w") as f:
-        f.write(csv_header)
 
     lap_buffer_csv = []
     
@@ -166,7 +158,7 @@ def main():
     last_lap_time_prev = 0
     t0 = time.time()
 
-    print("🏁 Registrazione attiva. Guida pulita per popolare il dataset (formato CSV)!")
+    print("🏁 Registrazione attiva. Guida pulita per popolare il dataset!")
 
     try:
         while True:
@@ -225,11 +217,9 @@ def main():
     except KeyboardInterrupt:
         print("\n🛑 Sessione interrotta dall'utente.")
         if is_lap_valid and len(lap_buffer_csv) > 100:
-            with open("manual_log.csv", "a") as f:
-                f.writelines(lap_buffer_csv)
+            save_lap(OUTPUT_DIR, lap_buffer_csv, 0)
             print(f"✅ {len(lap_buffer_csv)} step salvati da Ctrl+C.")
     finally:
-        print(f"Dataset finale pronto: 'manual_log.csv'")
         sys.exit()
     
 if __name__ == "__main__":
