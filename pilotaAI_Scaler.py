@@ -92,7 +92,7 @@ class PilotaKNN:
             sensors.get('angle', 0.0)
         ] + list(sensors.get('track', [200.0] * 19))
 
-        # 2. Scala con lo stesso scaler usato in training (obbligatorio per il KNN)
+        # 2. Scala con lo stesso scaler usato in training
         current_state_s = self.scaler.transform([current_state])
 
         # 3. Il modello richiede un array 2D, quindi lo passiamo dentro una lista []

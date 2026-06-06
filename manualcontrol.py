@@ -115,7 +115,7 @@ class ArcadeController:
         self.state['brake'] = max(0.0,  min(1.0, self.state['brake']))
 
 
-## FUNZIONI DI SALVATAGGIO
+# Salvataggio giro pulito con timestamp univoco
 def save_lap(output_dir, lap_buffer_csv, lap_time):
     """Salva un giro pulito aggiungendo un timestamp per evitare sovrascritture."""
     track_headers = ",".join([f"track_{i}" for i in range(19)])
