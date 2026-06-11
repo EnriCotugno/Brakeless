@@ -13,7 +13,6 @@ import snakeoil as snakeoil3
 DATASET_FILE = "dataset.csv"
 LAPS_FOLDER  = "Laps"          # Cartella contenente i file lap_*.csv
 K_NEIGHBORS  = 5
-MAX_STEPS    = 200_000
 
 
 def merge_laps(laps_folder: str, output_path: str) -> None:
@@ -125,29 +124,28 @@ def main():
             
             print("=== Gara Iniziata (Guida Autonoma KNN) ===")
             
-            for step in range(MAX_STEPS):
-                sensors = client.S.d
+            sensors = client.S.d
                 
-                # Auto-Reset se l'AI sbaglia ed esce di pista
-                if abs(sensors.get('trackPos', 0.0)) > 1.2:
-                    print("L'AI è uscita di pista! Riavvio sessione...")
-                    client.R.d['meta'] = 1
-                    client.respond_to_server()
-                    break
-
-                # Interroga il K-NN
-                actions = ai_driver.predici_azioni(sensors)
-
-                # Invia i comandi dell'AI a TORCS
-                client.R.d['steer']  = actions['steer']
-                client.R.d['accel']  = actions['accel']
-                client.R.d['brake']  = actions['brake']
-                client.R.d['gear']   = actions['gear']
-                client.R.d['clutch'] = 0.0
-                client.R.d['meta']   = 0
-
+            # Auto-Reset se l'AI sbaglia ed esce di pista
+            if abs(sensors.get('trackPos', 0.0)) > 1.2:
+                print("L'AI è uscita di pista! Riavvio sessione...")
+                client.R.d['meta'] = 1
                 client.respond_to_server()
-                client.get_servers_input()
+                break
+
+            # Interroga il K-NN
+            actions = ai_driver.predici_azioni(sensors)
+
+            # Invia i comandi dell'AI a TORCS
+            client.R.d['steer']  = actions['steer']
+            client.R.d['accel']  = actions['accel']
+            client.R.d['brake']  = actions['brake']
+            client.R.d['gear']   = actions['gear']
+            client.R.d['clutch'] = 0.0
+            client.R.d['meta']   = 0
+
+            client.respond_to_server()
+            client.get_servers_input()
                 
             time.sleep(1.0) # Pausa tra i riavvii
                 
